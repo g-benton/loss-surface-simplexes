@@ -19,6 +19,8 @@ Beyond providing the ability to find multidimensional simplexes of low loss in p
     <img src="./plots/cifar-simplex-acc.jpg" width="1000" />
 </p>
 
+For any fixed training budget or any fixed number of ensemble components we are able to outperform standard deep ensembles.
+
 ### Dependencies
 * [PyTorch](http://pytorch.org/)
 * [Torchvision](https://github.com/pytorch/vision/)
