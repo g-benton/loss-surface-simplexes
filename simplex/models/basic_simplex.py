@@ -37,6 +37,7 @@ class BasicSimplex(torch.nn.Module):
         )
         self.num_vertices = num_vertices
         self._fix_points(fixed_points)
+        self.n_vert = num_vertices
 
     def _fix_points(self, fixed_points):
         for (module, name) in self.params:
@@ -99,5 +100,15 @@ class BasicSimplex(torch.nn.Module):
 
         norm = (math.factorial(n_vert-1)**2) * (2. ** (n_vert-1))
         return torch.abs(torch.det(mat)).div(norm)
+    
+    def par_vectors(self):
+        all_vertices_list = []
+        for vertex in range(self.num_vertices):
+            vertex_list = []
+            for (module, name) in self.params:
+                val = module.__getattr__(name + "_vertex_" + str(vertex)).detach()
+                vertex_list.append(val)
+            all_vertices_list.append(flatten(vertex_list))
+        return torch.stack(all_vertices_list)
 
 
