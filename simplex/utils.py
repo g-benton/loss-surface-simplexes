@@ -29,15 +29,15 @@ def assign_pars(vector, model):
     return
 
 
-def eval(loader, model, criterion, device):
+def eval(loader, model, criterion):
     loss_sum = 0.0
     correct = 0.0
 
     model.eval()
 
     for i, (input, target) in enumerate(loader):
-        input = input.to(device)
-        target = target.to(device)
+        input = input.cuda()
+        target = target.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
         with torch.no_grad():
@@ -55,15 +55,15 @@ def eval(loader, model, criterion, device):
         'accuracy': correct / len(loader.dataset) * 100.0,
     }
 
-def train_epoch(loader, model, criterion, optimizer, device):
+def train_epoch(loader, model, criterion, optimizer):
     loss_sum = 0.0
     correct = 0.0
 
     model.train()
 
     for i, (input, target) in enumerate(loader):
-        input = input.to(device)
-        target = target.to(device)
+        input = input.cuda()
+        target = target.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
 
@@ -158,7 +158,7 @@ def train_epoch_multi_sample(loader, model, criterion,
 
 
 def train_transformer_epoch(
-        loader, model, criterion, optimizer, nsample, device, vol_reg=1e-5, gradient_accumulation_steps=1
+        loader, model, criterion, optimizer, nsample, vol_reg=1e-5, gradient_accumulation_steps=1
 ):
     loss_sum = 0.0
     correct = 0.0
@@ -170,15 +170,15 @@ def train_transformer_epoch(
             print(i, "batches completed")
         torch.cuda.empty_cache()
 
-        input = input.to(device)
-        target = target.to(device)
+        input = input.cuda()
+        target = target.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
         
         loss = 0.
         for j in range(nsample):
             output = model(input_var)[0]
-            loss = loss + criterion(output, target_var)
+            loss += criterion(output, target_var)
         loss.div(nsample)
         
         if gradient_accumulation_steps > 1:

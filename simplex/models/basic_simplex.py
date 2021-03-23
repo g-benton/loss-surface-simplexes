@@ -111,9 +111,4 @@ class BasicSimplex(torch.nn.Module):
             all_vertices_list.append(flatten(vertex_list))
         return torch.stack(all_vertices_list)
 
-    def set_vertex(self, vertex_id, state_dict):
-        for (module, name), state in zip(self.params, state_dict):
-            assert state.data.shape == module.__getattr__(name + "_vertex_" + str(vertex_id)).shape
-            module.__setattr__(name + "_vertex_" + str(vertex_id), state.data)
-        
 
