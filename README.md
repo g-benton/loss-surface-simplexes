@@ -1,6 +1,6 @@
 # Loss Surface Simplexes
 
-This repository contains the code accompanying our paper _Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling_ by Greg Benton, Wesley Maddox, Sanae Lotfi, and Andrew Gordon Wilson.
+This repository contains the code accompanying our paper [Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling](https://arxiv.org/abs/2102.13042) by Greg Benton, Wesley Maddox, Sanae Lotfi, and Andrew Gordon Wilson.
 
 ## Introduction
 
@@ -57,3 +57,16 @@ Forward calls to a `SimplexNet` instance by default samples a set of parameters 
 [Essentially No Barriers in Neural Network Energy Landscape](https://arxiv.org/pdf/1803.00885.pdf) by Felix Draxler, Kambis Veschgini, Manfred Salmhofer, Fred A. Hamprecht
 
 [Large Scale Structure of Neural Network Loss Landscapes](https://arxiv.org/pdf/1906.04724.pdf) by Stanislav Fort, Stanislaw Jastrzebski
+
+### Citation
+
+If you use this work, please cite it as
+
+```
+@article{benton2021loss,
+  title={Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling},
+  author={Benton, Gregory W and Maddox, Wesley J and Lotfi, Sanae and Wilson, Andrew Gordon},
+  journal={arXiv preprint arXiv:2102.13042},
+  year={2021}
+}
+```
