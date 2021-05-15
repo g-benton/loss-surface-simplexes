@@ -63,10 +63,10 @@ Forward calls to a `SimplexNet` instance by default samples a set of parameters 
 If you use this work, please cite it as
 
 ```
-@article{benton2021loss,
+@inproceedings{benton2021loss,
   title={Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling},
   author={Benton, Gregory W and Maddox, Wesley J and Lotfi, Sanae and Wilson, Andrew Gordon},
-  journal={arXiv preprint arXiv:2102.13042},
+  booktitle={International Conference on Machine Learning},
   year={2021}
 }
 ```
