@@ -1,6 +1,6 @@
 # Loss Surface Simplexes
 
-This repository contains the code accompanying our paper [Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling](https://arxiv.org/abs/2102.13042) by Greg Benton, Wesley Maddox, Sanae Lotfi, and Andrew Gordon Wilson.
+This repository contains the code accompanying our paper [Loss Surface Simplexes for Mode Connecting Volumes and Fast Ensembling](https://arxiv.org/abs/2102.13042) (ICML 2021) by Greg Benton, Wesley Maddox, Sanae Lotfi, and Andrew Gordon Wilson.
 
 ## Introduction
 
