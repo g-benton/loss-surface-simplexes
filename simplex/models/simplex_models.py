@@ -15,9 +15,9 @@ class SimplicialComplex(Module):
     def __init__(self, n_simplex):
         super(SimplicialComplex, self).__init__()
         self.n_simplex = n_simplex
-    
-    def forward(self, complex_modex):
-        
+
+    def forward(self, complex_model):
+
         ## first need to pick a simplex to sample from ##
         vols = []
         n_verts = []
@@ -28,20 +28,20 @@ class SimplicialComplex(Module):
         norm = sum(vols)
         vol_cumsum = np.cumsum([vv/norm for vv in vols])
         simp_ind = np.min(np.where(np.random.rand(1) < vol_cumsum)[0])
-        
+
         ## sample weights for simplex
         exps = [-(torch.rand(1)).log().item() for _ in range(n_verts[simp_ind])]
         total = sum(exps)
         exps = [exp/total for exp in exps]
-        
+
         ## now assign vertex weights out
         vert_weights = [0] * complex_model.n_vert
         for ii, vert in enumerate(complex_model.simplexes[simp_ind]):
             vert_weights[vert] = exps[ii]
 
         return vert_weights
-        
-        
+
+
 
 class Simplex(Module):
     def __init__(self, n_vert):
@@ -294,10 +294,10 @@ class SimplexNet(Module):
             self.fix_points = fix_points
         else:
             self.fix_points = n_vert * [False]
-            
+
         if simplicial_complex is None:
             simplicial_complex = {0:[ii for ii in range(n_vert)]}
-            
+
         self.simplicial_complex = simplicial_complex
         self.n_simplex = len(simplicial_complex)
         self.architecture = architecture
@@ -345,41 +345,41 @@ class SimplexNet(Module):
         coeffs_t = self.vertex_weights()
         output = self.net(input, coeffs_t)
         return output
-    
+
     def compute_center_weights(self):
         temp = [p for p in self.net.parameters()][0::self.n_vert]
         n_par = sum([p.numel() for p in temp])
         ## assign mean of old pars to new vertex ##
         par_vecs = self.par_vectors()
-        
+
         return par_vecs.mean(0).unsqueeze(0)
-    
+
     def par_vectors(self):
         temp = [p for p in self.net.parameters()][0::self.n_vert]
         n_par = sum([p.numel() for p in temp])
         ## assign mean of old pars to new vertex ##
         par_vecs = torch.zeros(self.n_vert, n_par).to(temp[0].device)
-        
+
         for ii in range(self.n_vert):
             temp = [p for p in self.net.parameters()][ii::self.n_vert]
             par_vecs[ii, :] = utils.flatten(temp)
-    
+
         return par_vecs
-    
+
     def add_vert(self, to_simplexes=[0]):
-        
+
         self.fix_points = [True] * self.n_vert + [False]
-        new_model = self.architecture(self.n_output, 
+        new_model = self.architecture(self.n_output,
                                       fix_points=self.fix_points,
                                       **self.architecture_kwargs)
-        
+
         ## assign osld pars to new model ##
         for index in range(self.n_vert):
             old_parameters = list(self.net. parameters())[index::self.n_vert]
             new_parameters = list(new_model.parameters())[index::(self.n_vert+1)]
             for old_par, new_par in zip(old_parameters, new_parameters):
                 new_par.data.copy_(old_par.data)
-        
+
         new_parameters = list(new_model.parameters())
         new_parameters = new_parameters[(self.n_vert)::(self.n_vert+1)]
         n_par = sum([p.numel() for p in new_parameters])
@@ -393,7 +393,7 @@ class SimplexNet(Module):
         center_pars = utils.unflatten_like(center_pars, new_parameters)
         for cntr, par in zip(center_pars, new_parameters):
             par.data = cntr.to(par.device)
-        
+
         ## update self values ##
         self.n_vert += 1
         self.net = new_model
@@ -401,13 +401,13 @@ class SimplexNet(Module):
         for module in self.net.modules():
             if issubclass(module.__class__, SimplexModule):
                 self.simplex_modules.append(module)
-        
+
         for cc in to_simplexes:
             self.simplicial_complex[cc].append(self.n_vert-1)
-        
+
         return
-    
-    
+
+
     def vertex_weights(self):
 
         ## first need to pick a simplex to sample from ##
@@ -429,8 +429,8 @@ class SimplexNet(Module):
             vert_weights[vert] = exps[ii]
 
         return vert_weights
-    
-    
+
+
     def total_volume(self, vol_function=complex_volume):
         vol = 0
 #         for simp in range(self.n_simplex):
