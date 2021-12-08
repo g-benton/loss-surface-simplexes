@@ -44,7 +44,8 @@ class BasicSimplex(torch.nn.Module):
             for vertex in range(self.num_vertices):
                 if fixed_points[vertex]:
                     module.__getattr__(name + "_vertex_" + str(vertex)).detach_()
-
+                    module.__getattr__(name + "_vertex_" + str(vertex)).requires_grad_(False)
+                    
     def sample(self, coeffs_t):
         for (module, name) in self.params:
             new_par = 0.
